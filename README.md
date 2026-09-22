@@ -1,8 +1,24 @@
-# API de Usuários
+# Plataforma de Autenticação
 
-Projeto de uma API REST desenvolvida durante meus estudos de Java e Spring Boot. A aplicação permite cadastrar, consultar, atualizar, excluir e autenticar usuários, sempre evitando expor senhas nas respostas da API.
+Projeto desenvolvido durante meus estudos de desenvolvimento Back-end com Java e Spring Boot.
+
+A aplicação possui uma interface simples integrada a uma API REST para gerenciar usuários e realizar autenticação. O foco foi praticar a comunicação entre front-end e back-end, operações CRUD, validações e cuidados básicos com senhas.
+
+## Funcionalidades
+
+- Interface simples para interagir com a aplicação
+- Cadastro, consulta, atualização e exclusão de usuários
+- Login por e-mail e senha
+- Validação de nome, e-mail e senha
+- Senhas armazenadas como hash BCrypt
+- Respostas da API sem exposição do campo `senha`
+- Tratamento de credenciais inválidas com `401 Unauthorized`
+- Console H2 para desenvolvimento local
+- Testes automatizados para CRUD e login
 
 ## Tecnologias
+
+### Back-end
 
 - Java 25
 - Spring Boot 3.5.5
@@ -11,22 +27,21 @@ Projeto de uma API REST desenvolvida durante meus estudos de Java e Spring Boot.
 - Bean Validation
 - H2 Database
 - Gradle
-- BCrypt (`spring-security-crypto`)
+- BCrypt
 
-## Funcionalidades
+### Front-end
 
-- CRUD completo de usuários
-- Validação de nome, e-mail e senha
-- Senhas armazenadas com hash BCrypt
-- Login por e-mail e senha
-- Respostas sem o campo de senha
-- Console H2 para desenvolvimento local
+- Interface simples integrada à API REST
 
-## Como executar
+Index.html
+Script.js
+Style.css
+
+## Como executar a API
 
 1. Clone o repositório.
 2. Entre na pasta do projeto.
-3. Execute no terminal:
+3. Execute:
 
 ```powershell
 .\gradlew.bat bootRun
@@ -34,7 +49,7 @@ Projeto de uma API REST desenvolvida durante meus estudos de Java e Spring Boot.
 
 4. A API estará disponível em `http://localhost:8080`.
 
-Para verificar se o projeto compila e os testes passam:
+Para compilar e executar os testes:
 
 ```powershell
 .\gradlew.bat clean build
@@ -49,9 +64,9 @@ Para verificar se o projeto compila e os testes passam:
 | GET | `/usuarios/{id}` | Busca um usuário por ID |
 | PUT | `/usuarios/{id}` | Atualiza um usuário |
 | DELETE | `/usuarios/{id}` | Remove um usuário |
-| POST | `/usuarios/login` | Autentica um usuário |
+| POST | `/usuarios/login` | Realiza o login |
 
-### Cadastro
+## Exemplo de cadastro
 
 `POST /usuarios`
 
@@ -63,7 +78,7 @@ Para verificar se o projeto compila e os testes passam:
 }
 ```
 
-Resposta esperada (`201 Created`):
+Resposta (`201 Created`):
 
 ```json
 {
@@ -73,7 +88,7 @@ Resposta esperada (`201 Created`):
 }
 ```
 
-### Login
+## Exemplo de login
 
 `POST /usuarios/login`
 
@@ -84,7 +99,7 @@ Resposta esperada (`201 Created`):
 }
 ```
 
-Resposta esperada (`200 OK`):
+Resposta (`200 OK`):
 
 ```json
 {
@@ -97,7 +112,7 @@ Resposta esperada (`200 OK`):
 }
 ```
 
-Com credenciais inválidas, a API retorna `401 Unauthorized` sem informar se o e-mail ou a senha falhou:
+Com credenciais inválidas, a API retorna `401 Unauthorized`:
 
 ```json
 {
@@ -113,19 +128,18 @@ Com a aplicação em execução, acesse `http://localhost:8080/h2-console`.
 - Usuário: `sa`
 - Senha: deixe em branco
 
-Para consultar os dados:
-
 ```sql
 SELECT * FROM USUARIOS;
 ```
 
-O campo `SENHA` deve conter um hash iniciado por `$2a$` ou `$2b$`, nunca a senha em texto puro.
+O campo `SENHA` deve conter um hash BCrypt, nunca a senha original.
 
-## Observação sobre autenticação
+## Próximos passos
 
-Este projeto implementa a validação de login com BCrypt como exercício de segurança. Em uma próxima evolução, o endpoint de login pode emitir um token JWT para proteger rotas privadas.
+- Versionar o front-end junto ao projeto.
+- Implementar JWT para proteger rotas privadas.
+- Evoluir a interface e melhorar a experiência de uso.
 
 ## Autor
 
-Lucca Ministro Carrieri
-Desenvolvido como projeto de estudo de Java e Spring Boot.
+Projeto desenvolvido para prática de Java, Spring Boot, APIs REST e integração entre front-end e back-end.
