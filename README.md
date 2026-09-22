@@ -127,4 +127,5 @@ Este projeto implementa a validação de login com BCrypt como exercício de seg
 
 ## Autor
 
+Lucca Ministro Carrieri
 Desenvolvido como projeto de estudo de Java e Spring Boot.
