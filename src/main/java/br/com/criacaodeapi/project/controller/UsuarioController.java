@@ -1,5 +1,8 @@
 package br.com.criacaodeapi.project.controller;
 
+import br.com.criacaodeapi.project.dto.ErroResponse;
+import br.com.criacaodeapi.project.dto.LoginRequest;
+import br.com.criacaodeapi.project.dto.LoginResponse;
 import br.com.criacaodeapi.project.dto.UsuarioResponse;
 import br.com.criacaodeapi.project.model.Usuario;
 import br.com.criacaodeapi.project.service.UsuarioService;
@@ -90,5 +93,14 @@ public class UsuarioController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return usuarioService.autenticar(loginRequest.getEmail(), loginRequest.getSenha())
+                .<ResponseEntity<?>>map(usuario -> ResponseEntity.ok(
+                        new LoginResponse("Login realizado com sucesso", UsuarioResponse.fromUsuario(usuario))))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ErroResponse("E-mail ou senha inválidos")));
     }
 }

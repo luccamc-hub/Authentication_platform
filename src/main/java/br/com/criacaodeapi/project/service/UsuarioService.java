@@ -2,20 +2,31 @@ package br.com.criacaodeapi.project.service;
 
 import br.com.criacaodeapi.project.model.Usuario;
 import br.com.criacaodeapi.project.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder =
+            new BCryptPasswordEncoder();
+
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
     public Usuario criarUsuario(Usuario usuario) {
+
+        String senhaCriptografada =
+                passwordEncoder.encode(usuario.getSenha());
+
+        usuario.setSenha(senhaCriptografada);
+
         return usuarioRepository.save(usuario);
     }
 
@@ -39,7 +50,11 @@ public class UsuarioService {
 
         usuario.setNome(usuarioAtualizado.getNome());
         usuario.setEmail(usuarioAtualizado.getEmail());
-        usuario.setSenha(usuarioAtualizado.getSenha());
+
+        String senhaCriptografada =
+                passwordEncoder.encode(usuarioAtualizado.getSenha());
+
+        usuario.setSenha(senhaCriptografada);
 
         return usuarioRepository.save(usuario);
     }
@@ -52,5 +67,10 @@ public class UsuarioService {
 
         usuarioRepository.deleteById(id);
         return true;
+    }
+
+    public Optional<Usuario> autenticar(String email, String senha) {
+        return usuarioRepository.findByEmail(email)
+                .filter(usuario -> passwordEncoder.matches(senha, usuario.getSenha()));
     }
 }
